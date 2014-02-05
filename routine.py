@@ -14,17 +14,17 @@ ROUTINE_HOME = join(HOME, ".routine")
 def new_routine(args):
     ensure_routine_home()
 
-    if len(args) != 1:
-        exit("Need exactly one argument after new")
-        
-    routine = args[0].lower()
-    routine_path = join(ROUTINE_HOME, routine)
+    # ensure that none of the routines already exist
+    for a in args:
+        routine = a.lower()
+        routine_path = join(ROUTINE_HOME, routine)
+        if exists(routine_path):
+            exit("routine '{}' already exists, no routines created".format(routine))
     
-    if exists(routine_path):
-        exit("routine '{}' already exists".format(routine))
-        
-    call(['emacs', '-nw', routine_path])
-
+    for a in args:
+        routine = a.lower()
+        routine_path = join(ROUTINE_HOME, routine)
+        call(['emacs', '-nw', routine_path])
 
 def list_routines(args):
     ensure_routine_home()
@@ -38,47 +38,40 @@ def list_routines(args):
 
 def remove_routine(args):
     ensure_routine_home()
-    
-    # make sure all the routines are valid before removing any
-    for a in args:
-        routine = a.lower()
-        routine_path = join(ROUTINE_HOME, routine)
-        if not exists(routine_path):
-            exit("Routine '{}' doesn't exist, no routines removed".format(routine))
+    ensure_routines_exist(args)
 
     for a in args:
         routine = a.lower()
         routine_path = join(ROUTINE_HOME, routine)
         os.remove(routine_path)
 
+
 def run_routine(args):
     ensure_routine_home()
-    
-    if len(args) != 1:
-        exit("Need exactly one argument after 'run'")
-        
-    routine =  args[0].lower()
-    routine_path = join(ROUTINE_HOME, routine)
-    
-    if not exists(routine_path):
-        exit("Routine '{}' doesn't exist".format(routine))
+    ensure_routines_exist(args)
 
-    call(["/bin/bash", routine_path])
+    for a in args:
+        routine =  args[0].lower()
+        routine_path = join(ROUTINE_HOME, routine)
+        call(["/bin/bash", routine_path])
 
 
 def edit_routine(args):
     ensure_routine_home()
+    ensure_routines_exist(args)
     
-    if len(args) != 1:
-       exit("Need exactly one argument after 'edit'")
+    for a in args:
+        routine =  a.lower()
+        routine_path = join(ROUTINE_HOME, routine)
+        call(['emacs', '-nw', routine_path])
 
-    routine =  args[0].lower()
-    routine_path = join(ROUTINE_HOME, routine)
-    
-    if not exists(routine_path):
-        exit("Routine '{}' doesn't exist".format(routine))
 
-    call(['emacs', '-nw', routine_path])
+def ensure_routines_exist(routines):
+    for r in routines:
+        routine =  r.lower()
+        routine_path = join(ROUTINE_HOME, routine)
+        if not exists(routine_path):
+            exit("Routine '{}' doesn't exist, no operations performed".format(routine))
 
     
 def ensure_routine_home():
@@ -87,7 +80,7 @@ def ensure_routine_home():
 
 
 def show_help():
-    help = """
+    print("""
 routine manager and runner
 
 OPTIONS
@@ -103,15 +96,14 @@ OPTIONS
     run [ROUTINE]
         Runs the routine [ROUTINE]
 
+    group [GROUP_NAME] [ROUTINES]
+
     help
         Displays this help message
 
 EXAMPLES
     routine new wakeup
-
-    routine run wakeup"""
-    
-    print(help)
+    routine run wakeup""")
 
 if __name__ == "__main__":
     
