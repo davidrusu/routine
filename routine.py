@@ -39,16 +39,17 @@ def list_routines(args):
 def remove_routine(args):
     ensure_routine_home()
     
-    if len(args) != 1:
-        exit("Need exactly one argument after remove")
-        
-    routine = args[0].lower()
-    routine_path = join(ROUTINE_HOME, routine)
+    # make sure all the routines are valid before removing any
+    for a in args:
+        routine = a.lower()
+        routine_path = join(ROUTINE_HOME, routine)
+        if not exists(routine_path):
+            exit("Routine '{}' doesn't exist, no routines removed".format(routine))
 
-    if not exists(routine_path):
-        exit("Routine '{}' doesn't exist".format(routine))
-
-    os.remove(routine_path)
+    for a in args:
+        routine = a.lower()
+        routine_path = join(ROUTINE_HOME, routine)
+        os.remove(routine_path)
 
 def run_routine(args):
     ensure_routine_home()
