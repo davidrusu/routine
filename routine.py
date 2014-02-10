@@ -63,7 +63,7 @@ def run_routine(args):
     ensure_routines_exist(args)
 
     for a in args:
-        routine =  args[0].lower()
+        routine = args[0].lower()
         routine_path = join(ROUTINE_HOME, routine)
         call(["/bin/bash", routine_path])
 
