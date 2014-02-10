@@ -17,7 +17,7 @@ def new_routine(args):
     # ensure that none of the routines already exist
     for a in args:
         ensure_routine_not_exist(a)
-    
+
     for a in args:
         routine = a.lower()
         routine_path = join(ROUTINE_HOME, routine)
@@ -31,7 +31,7 @@ def rename_routine(args):
 
     routine = args[0]
     ensure_routines_exist([routine])
-    
+
     new_routine_path = join(ROUTINE_HOME, args[1].lower())
     ensure_routine_not_exist(new_routine_path)
 
@@ -71,7 +71,7 @@ def run_routine(args):
 def edit_routine(args):
     ensure_routine_home()
     ensure_routines_exist(args)
-    
+
     for a in args:
         routine =  a.lower()
         routine_path = join(ROUTINE_HOME, routine)
@@ -83,12 +83,14 @@ def ensure_routines_exist(routines):
         routine =  r.lower()
         routine_path = join(ROUTINE_HOME, routine)
         if not exists(routine_path):
-            exit("Routine '{}' doesn't exist, no operations performed".format(routine))
+            exit(\
+"Routine '{}' doesn't exist, no operations performed".format(routine))
 
 def ensure_routine_not_exist(routine):
     routine_path = join(ROUTINE_HOME, routine.lower())
     if exists(routine_path):
-        exit("routine '{}' already exists, no routines created".format(routine.lower()))
+        exit(\
+"routine '{}' already exists, no routines created".format(routine.lower()))
 
 def ensure_routine_home():
     if not exists(ROUTINE_HOME):
@@ -126,7 +128,7 @@ EXAMPLES
     routine run wakeup""")
 
 if __name__ == "__main__":
-    
+
     command = sys.argv[1].lower()
     commands = {"new": new_routine,
                 "remove": remove_routine,
@@ -140,4 +142,3 @@ if __name__ == "__main__":
         commands[command](args)
     else:
         show_help()
-
