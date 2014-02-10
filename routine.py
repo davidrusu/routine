@@ -80,7 +80,7 @@ def edit_routine(args):
 
 def ensure_routines_exist(routines):
     for r in routines:
-        routine =  r.lower()
+        routine = r.lower()
         routine_path = join(ROUTINE_HOME, routine)
         if not exists(routine_path):
             exit(\
