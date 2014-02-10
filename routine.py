@@ -103,6 +103,9 @@ OPTIONS
     new routine_name
         Creates a new routine named 'routine_name'
 
+    edit routine_name
+        Edit the routine named 'routine_name'
+
     remove routine_name
         removes the routine named [ROUTINE]
 
