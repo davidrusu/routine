@@ -1,9 +1,10 @@
 #! /usr/bin/python3
 
-
 import sys
 import os
 from os.path import join, expanduser, isfile, exists
+from filecmp import cmp
+from shutil import copyfile
 from subprocess import call
 
 
@@ -95,7 +96,10 @@ def ensure_routine_not_exist(routine):
 def ensure_routine_home():
     if not exists(ROUTINE_HOME):
         os.mkdir(ROUTINE_HOME)
-
+    api = 'api.py'
+    home_api = join(ROUTINE_HOME, api)
+    if not exists(home_api) or not cmp(home_api, api):
+        copyfile(api, home_api)
 
 def show_help():
     print("""
