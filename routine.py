@@ -66,7 +66,7 @@ def run_routine(args):
     for a in args:
         routine = args[0].lower()
         routine_path = join(ROUTINE_HOME, routine)
-        call(["/bin/bash", routine_path])
+        call(['python3', routine_path])
 
 
 def edit_routine(args):
