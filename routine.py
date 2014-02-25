@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+﻿#! /usr/bin/python3
 
 import sys
 import os
@@ -7,6 +7,7 @@ from filecmp import cmp
 from shutil import copyfile
 from subprocess import call
 
+EDITOR = r'C:\Program Files (x86)\Notepad++\notepad++.exe'
 
 HOME = expanduser("~")
 ROUTINE_HOME = join(HOME, ".routine")
@@ -22,7 +23,7 @@ def new_routine(args):
     for a in args:
         routine = a.lower()
         routine_path = join(ROUTINE_HOME, routine)
-        call(['emacs', '-nw', routine_path])
+        call([EDITOR, routine_path])
 
 def rename_routine(args):
     ensure_routine_home()
@@ -69,7 +70,7 @@ def run_routine(args):
     for a in args:
         routine = args[0].lower()
         routine_path = join(ROUTINE_HOME, routine)
-        call(['python3', routine_path])
+        call(['python', routine_path])
 
 
 def edit_routine(args):
@@ -79,7 +80,7 @@ def edit_routine(args):
     for a in args:
         routine =  a.lower()
         routine_path = join(ROUTINE_HOME, routine)
-        call(['emacs', '-nw', routine_path])
+        call([EDITOR, routine_path])
 
 
 def ensure_routines_exist(routines):
