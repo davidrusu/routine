@@ -41,10 +41,13 @@ def rename_routine(args):
 
 def list_routines(args):
     ensure_routine_home()
+    non_routine_files = {'api.py'}
 
     dir_list = os.listdir(ROUTINE_HOME)
     files = [f for f in dir_list if isfile(join(ROUTINE_HOME, f))]
 
+    files = filter(lambda f: f not in non_routine_files, files)
+    
     for f in sorted(files):
         print(f)
 
@@ -98,8 +101,8 @@ def ensure_routine_home():
         os.mkdir(ROUTINE_HOME)
     api = 'api.py'
     home_api = join(ROUTINE_HOME, api)
-    if not exists(home_api) or not cmp(home_api, api):
-        copyfile(api, home_api)
+    if not exists(home_api):
+        print("{} missing from .routine folder".format(api))
 
 def show_help():
     print("""
@@ -132,8 +135,8 @@ EXAMPLES
     routine run wakeup""")
 
 if __name__ == "__main__":
-
-    command = sys.argv[1].lower()
+    
+    command = sys.argv[1].lower() if len(sys.argv) > 1 else 'help'
     commands = {"new": new_routine,
                 "remove": remove_routine,
                 "list": list_routines,
