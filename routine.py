@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+﻿#! /usr/bin/python3
 
 import sys, os, shlex
 from os.path import join, expanduser, isfile, exists
