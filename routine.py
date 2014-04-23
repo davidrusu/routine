@@ -1,7 +1,6 @@
 #! /usr/bin/python3
 
-import sys
-import os
+import sys, os, shlex
 from os.path import join, expanduser, isfile, exists
 from filecmp import cmp
 from shutil import copyfile
@@ -10,7 +9,10 @@ from subprocess import call
 
 HOME = expanduser("~")
 ROUTINE_HOME = join(HOME, ".routine")
+EDITOR = os.environ.get('EDITOR')
 
+if EDITOR == "":
+    exit('EDITOR environment vaiable not set')
 
 def new_routine(args):
     ensure_routine_home()
@@ -18,17 +20,14 @@ def new_routine(args):
     # ensure that none of the routines already exist
     for a in args:
         ensure_routine_not_exist(a)
-
-    for a in args:
-        routine = a.lower()
-        routine_path = join(ROUTINE_HOME, routine)
-        call(['emacs', '-nw', routine_path])
+        
+    edit_routine(args)
 
 def rename_routine(args):
     ensure_routine_home()
 
     if len(args) != 2:
-        exit("rename takes exactly 2  argument")
+        exit("rename takes exactly 2 argument")
 
     routine = args[0]
     ensure_routines_exist([routine])
@@ -65,21 +64,27 @@ def remove_routine(args):
 def run_routine(args):
     ensure_routine_home()
     ensure_routines_exist(args)
-
+    
     for a in args:
         routine = args[0].lower()
         routine_path = join(ROUTINE_HOME, routine)
-        call(['python3', routine_path])
+        with open(routine_path) as task_file:
+            name_space = {}
+            exec(task_file.read(), name_space)
+            for task in name_space['tasks']:
+                task()
 
 
 def edit_routine(args):
     ensure_routine_home()
     ensure_routines_exist(args)
 
+    # split for case where EDITOR contains arguments e.g. emacs -nw
+    editor = shlex.split(EDITOR)
     for a in args:
         routine =  a.lower()
         routine_path = join(ROUTINE_HOME, routine)
-        call(['emacs', '-nw', routine_path])
+        call(editor + [routine_path])
 
 
 def ensure_routines_exist(routines):
@@ -87,14 +92,13 @@ def ensure_routines_exist(routines):
         routine = r.lower()
         routine_path = join(ROUTINE_HOME, routine)
         if not exists(routine_path):
-            exit(\
-"Routine '{}' doesn't exist, no operations performed".format(routine))
+            exit("Routine '{}' doesn't exist, no changes made".format(routine))
 
 def ensure_routine_not_exist(routine):
-    routine_path = join(ROUTINE_HOME, routine.lower())
+    routine = routine.lower()
+    routine_path = join(ROUTINE_HOME, routine)
     if exists(routine_path):
-        exit(\
-"routine '{}' already exists, no routines created".format(routine.lower()))
+        exit("routine '{}' already exists, no changes made".format(routine))
 
 def ensure_routine_home():
     if not exists(ROUTINE_HOME):
@@ -105,7 +109,7 @@ def ensure_routine_home():
         print("{} missing from .routine folder".format(api))
 
 def show_help():
-    print("""
+    help_msg = """
 routine manager and runner
 
 OPTIONS
@@ -132,10 +136,10 @@ OPTIONS
 
 EXAMPLES
     routine new wakeup
-    routine run wakeup""")
+    routine run wakeup"""
+    print(help_msg)
 
 if __name__ == "__main__":
-    
     command = sys.argv[1].lower() if len(sys.argv) > 1 else 'help'
     commands = {"new": new_routine,
                 "remove": remove_routine,
