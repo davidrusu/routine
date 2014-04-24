@@ -2,7 +2,6 @@
 
 import sys, os, shlex
 from os.path import join, expanduser, isfile, exists
-from filecmp import cmp 
 from shutil import copyfile
 from subprocess import call
 
@@ -18,7 +17,7 @@ def new_routine(args):
     # ensure that none of the routines already exist
     for a in args:
         ensure_routine_not_exist(a)
-        
+
     edit_routine(args)
 
 def rename_routine(args):
@@ -44,7 +43,7 @@ def list_routines(args):
     files = [f for f in dir_list if isfile(join(ROUTINE_HOME, f))]
 
     files = filter(lambda f: f not in non_routine_files, files)
-    
+
     for f in sorted(files):
         print(f)
 
@@ -62,7 +61,7 @@ def remove_routine(args):
 def run_routine(args):
     ensure_routine_home()
     ensure_routines_exist(args)
-    
+
     for a in args:
         routine = args[0].lower()
         routine_path = join(ROUTINE_HOME, routine)
