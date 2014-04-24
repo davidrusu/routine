@@ -1,16 +1,14 @@
-﻿#! /usr/bin/python3
+#!/usr/bin/python3
 
 import sys, os, shlex
 from os.path import join, expanduser, isfile, exists
-from filecmp import cmp
+from filecmp import cmp 
 from shutil import copyfile
 from subprocess import call
-
 
 HOME = expanduser("~")
 ROUTINE_HOME = join(HOME, ".routine")
 EDITOR = os.environ.get('EDITOR')
-
 if EDITOR == "":
     exit('EDITOR environment vaiable not set')
 
