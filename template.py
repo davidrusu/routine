@@ -1,3 +1,5 @@
+# -*- mode: python -*-
+
 from api import web, run, rund
 
 '''

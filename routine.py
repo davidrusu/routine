@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+"""
+Simple routine manager
+"""
+
 import sys, os, shlex
 from os.path import join, expanduser, isfile, exists
 from shutil import copyfile
@@ -17,8 +21,12 @@ def new_routine(args):
     # ensure that none of the routines already exist
     for a in args:
         ensure_routine_not_exist(a)
-
-    edit_routine(args)
+        
+    for a in args:
+        import template
+        
+        copyfile(template.__file__, join(ROUTINE_HOME, a))
+        edit_routine([a])
 
 def rename_routine(args):
     ensure_routine_home()
@@ -100,10 +108,6 @@ def ensure_routine_not_exist(routine):
 def ensure_routine_home():
     if not exists(ROUTINE_HOME):
         os.mkdir(ROUTINE_HOME)
-    api = 'api.py'
-    home_api = join(ROUTINE_HOME, api)
-    if not exists(home_api):
-        print("{} missing from .routine folder".format(api))
 
 def show_help():
     help_msg = """
