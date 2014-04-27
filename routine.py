@@ -141,16 +141,19 @@ EXAMPLES
     print(help_msg)
 
 if __name__ == "__main__":
-    command = sys.argv[1].lower() if len(sys.argv) > 1 else 'help'
-    commands = {"new": new_routine,
-                "remove": remove_routine,
-                "list": list_routines,
-                "run": run_routine,
-                "edit": edit_routine,
-                "rename": rename_routine}
-
-    if command in commands:
-        args = sys.argv[2:]
-        commands[command](args)
-    else:
-        show_help()
+    try:
+        command = sys.argv[1].lower() if len(sys.argv) > 1 else 'help'
+        commands = {"new": new_routine,
+                    "remove": remove_routine,
+                    "list": list_routines,
+                    "run": run_routine,
+                    "edit": edit_routine,
+                    "rename": rename_routine}
+    
+        if command in commands:
+            args = sys.argv[2:]
+            commands[command](args)
+        else:
+            show_help()
+    except KeyboardInterrupt as e:
+        exit()
