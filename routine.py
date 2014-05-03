@@ -45,13 +45,8 @@ def rename_routine(args):
 
 def list_routines(args):
     ensure_routine_home()
-    non_routine_files = {'api.py'}
-
     dir_list = os.listdir(ROUTINE_HOME)
     files = [f for f in dir_list if isfile(join(ROUTINE_HOME, f))]
-
-    files = filter(lambda f: f not in non_routine_files, files)
-
     for f in sorted(files):
         print(f)
 
