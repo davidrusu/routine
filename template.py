@@ -1,6 +1,7 @@
 # -*- mode: python -*-
+# vim: setlocal filetype=python:
 # Tasks are run in the order they are placed in the list
-# 
+#
 # EXAMPLE:
 # tasks = [ rund('evince', 'file.pdf')    # doesn't wait for 'evince' to finish
 #         , web('example.com')            # opens www.example.com in firefox
